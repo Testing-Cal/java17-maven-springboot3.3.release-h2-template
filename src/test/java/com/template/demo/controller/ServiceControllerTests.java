@@ -5,14 +5,15 @@ import com.template.demo.bean.PairedComponentDetailsBean;
 import com.template.demo.service.ComponentDetailsService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * @author nsingotam
  */
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ServiceControllerTests {
 
     private Gson gson;
@@ -39,7 +40,7 @@ public class ServiceControllerTests {
     @InjectMocks
     private ServiceController serviceController;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(this.serviceController).build();
