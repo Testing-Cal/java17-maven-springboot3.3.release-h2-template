@@ -333,3 +333,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 !/build/libs/
+
+# Include the build/libs directory
+!build/libs/
