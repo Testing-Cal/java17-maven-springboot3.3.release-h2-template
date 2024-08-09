@@ -169,13 +169,13 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco.version}</version>
-				<configuration>
+				<!-- <configuration>
 					<excludes>
 						<exclude>**/*DemoProjectApplication.class</exclude>
 						<exclude>**/com/template/demo/entity/*</exclude>
 						<exclude>**/com/template/demo/bean/*</exclude>
 					</excludes>
-				</configuration>
+				</configuration> -->
 				<executions>
 					<execution>
 						<goals>
