@@ -1,2 +1,2 @@
-# java17-maven-springboot3.3.release-h2-template-1.0
-
+# Java17 Spring Boot 3.3-Maven
+The files in this sample template are provided for guidance purposes only. They should be customized and adapted to meet the specific requirements of your application.
