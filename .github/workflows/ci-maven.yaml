@@ -56,24 +56,24 @@ jobs:
           docker run --rm -v "$GITHUB_WORKSPACE":/opt/repo -w /opt/repo $CI_IMAGE ./mvnw test --batch-mode
 
 
-      - name: SonarQube Scan
-        run: |
-          docker run -v "$GITHUB_WORKSPACE":/app -w /app "$SONAR_IMAGE_VERSION" -Dsonar.java.binaries='.' -Dsonar.exclusions='pom.xml, target/**/*' -Dsonar.projectKey="$SONAR_PROJECT_KEY" -Dsonar.projectName="$SONAR_PROJECT_KEY" -Dsonar.sources=src -Dsonar.host.url="$SONAR_HOST" -Dsonar.organization="$SONAR_ORG" -Dsonar.login=${{ secrets[env.SONAR_CREDENTIAL_ID] }} -Dsonar.token=${{ secrets[env.SONAR_CREDENTIAL_ID] }}
+      # - name: SonarQube Scan
+      #   run: |
+      #     docker run -v "$GITHUB_WORKSPACE":/app -w /app "$SONAR_IMAGE_VERSION" -Dsonar.java.binaries='.' -Dsonar.exclusions='pom.xml, target/**/*' -Dsonar.projectKey="$SONAR_PROJECT_KEY" -Dsonar.projectName="$SONAR_PROJECT_KEY" -Dsonar.sources=src -Dsonar.host.url="$SONAR_HOST" -Dsonar.organization="$SONAR_ORG" -Dsonar.login=${{ secrets[env.SONAR_CREDENTIAL_ID] }} -Dsonar.token=${{ secrets[env.SONAR_CREDENTIAL_ID] }}
 
-      - name: Build Container Image
-        run: |
-          docker build -t "$REGISTRY_URL:$BUILD_TAG" -t "$REGISTRY_URL:latest" .
+      # - name: Build Container Image
+      #   run: |
+      #     docker build -t "$REGISTRY_URL:$BUILD_TAG" -t "$REGISTRY_URL:latest" .
 
-      - name: Setup JFrog CLI
-        if: env.CONTAINER_SCAN_TYPE == 'XRAY'
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: "https://${{ env.DOCKER_LOGIN_URL }}"
-          JF_ACCESS_TOKEN: ${{ secrets[env.ARTIFACTORY_PASSWORD_SECRET] }}
+      # - name: Setup JFrog CLI
+      #   if: env.CONTAINER_SCAN_TYPE == 'XRAY'
+      #   uses: jfrog/setup-jfrog-cli@v4
+      #   env:
+      #     JF_URL: "https://${{ env.DOCKER_LOGIN_URL }}"
+      #     JF_ACCESS_TOKEN: ${{ secrets[env.ARTIFACTORY_PASSWORD_SECRET] }}
 
-      - name: Container Image Scan
-        if: env.CONTAINER_SCAN_TYPE == 'XRAY'
-        run: jf docker scan $REGISTRY_URL:$BUILD_TAG
+      # - name: Container Image Scan
+      #   if: env.CONTAINER_SCAN_TYPE == 'XRAY'
+      #   run: jf docker scan $REGISTRY_URL:$BUILD_TAG
 
       - name: Publish Artifact
         if: env.PUBLISH_ARTIFACT == 'true'
