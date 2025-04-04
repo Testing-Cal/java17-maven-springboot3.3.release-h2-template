@@ -30,7 +30,7 @@ jobs:
           echo "STAGE_FLAG=$(echo "$JSON_STRING" | jq -r '.general.stageFlag')"  >> "$GITHUB_ENV"
           echo "CONTAINER_SCAN_TYPE=$(echo "$JSON_STRING" | jq -r '.general.containerScanType')"  >> "$GITHUB_ENV"
           echo "DOCKERHOST=$(echo "$JSON_STRING" | jq -r '.general.dockerHostIP')"  >> "$GITHUB_ENV"
-          echo "RELEASE_NAME=$(echo "$JSON_STRING" | jq -r '.general.name')"  >> "$GITHUB_ENV"
+          echo "REPO_NAME=$(echo "$JSON_STRING" | jq -r '.general.repoName')"  >> "$GITHUB_ENV"
           echo "CONTEXT=$(echo "$JSON_STRING" | jq -r '.general.contextPath')" >> "$GITHUB_ENV"
           echo "SONAR_ORG=$(echo "$JSON_STRING" | jq -r '.general.sonarOrg')" >> "$GITHUB_ENV"
           echo "SONAR_HOST=$(echo "$JSON_STRING" | jq -r '.general.sonarHost')" >> "$GITHUB_ENV"
@@ -39,6 +39,11 @@ jobs:
           echo "ARTIFACTORY_PASSWORD_SECRET=$(echo "$JSON_STRING" | jq -r '.general.ArtifactoryPasswordSecret')" >> "$GITHUB_ENV"
           echo "ARTIFACT_HOST_SECRET=$(echo "$JSON_STRING" | jq -r '.general.ArtifactoryHostSecret')" >> "$GITHUB_ENV"
           export REGISTRY_URL="$(echo "$JSON_STRING" | jq -r '.general.containerImagePath')"
+          echo "PUBLISH_ARTIFACT=$(echo "$JSON_STRING" | jq -r '.general.artifactPublish')" >> "$GITHUB_ENV"
+          echo "MVN_RELEASE=$(echo "$JSON_STRING" | jq -r '.general.artifactRepository.release')" >> "$GITHUB_ENV"
+          echo "MVN_LOCAL=$(echo "$JSON_STRING" | jq -r '.general.artifactRepository.local')" >> "$GITHUB_ENV"
+          echo "ARTIFACTORY_URL=$(echo "$JSON_STRING" | jq -r '.general.artifactoryURL')" >> "$GITHUB_ENV"
+
           echo "DOCKER_LOGIN_URL=$(echo "$REGISTRY_URL" | cut -d'/' -f1)" >> "$GITHUB_ENV"
 
       - name: Build
@@ -76,6 +81,7 @@ jobs:
           docker run --rm  -v "$GITHUB_WORKSPACE":/opt/"$REPO_NAME" -w /opt/"$REPO_NAME" "$JFROGCLI_IMAGE_VERSION" /bin/bash -c "jf c add jfrog --password "${{ secrets[env.ARTIFACTORY_PASSWORD_SECRET] }}" --user "${{ secrets[env.ARTIFACTORY_USER_SECRET] }}" --url="$ARTIFACTORY_URL" --artifactory-url="$ARTIFACTORY_URL"/artifactory --interactive=false --overwrite=true ; jf mvn-config --repo-deploy-releases "$MVN_RELEASE" --repo-deploy-snapshots "$MVN_LOCAL" ; jf mvn install" 
 
       - name: Publish Container Image
+        if: env.PUBLISH_ARTIFACT == "false" || env.PUBLISH_ARTIFACT == 'null'
         run: |
           echo "DOCKER_LOGIN_URL=$(echo "$REGISTRY_URL" | cut -d'/' -f1)" >> "$GITHUB_ENV"
           if [[ $ARTIFACTORY == "ECR" ]]
