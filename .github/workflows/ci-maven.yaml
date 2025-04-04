@@ -8,10 +8,8 @@ jobs:
       name: Dev
     env:
       CI_IMAGE: ${{ vars.CI_IMAGE }}
-      KUBECTL_IMAGE_VERSION: "bitnami/kubectl:1.28" #https://hub.docker.com/r/bitnami/kubectl/tags
-      HELM_IMAGE_VERSION: "alpine/helm:3.8.1" #https://hub.docker.com/r/alpine/helm/tags
-      OC_IMAGE_VERSION: "quay.io/openshift/origin-cli:4.9.0" #https://quay.io/repository/openshift/origin-cli?tab=tags
       SONAR_IMAGE_VERSION: "sonarsource/sonar-scanner-cli:11.0"
+      JFROGCLI_IMAGE_VERSION: "public.ecr.aws/lazsa/maven-jf:jdk21"
 
 
     steps:
